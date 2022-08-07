@@ -1,70 +1,38 @@
 {
-  "name": "festember-campus-ambassador",
-  "version": "0.1.0",
+  "name": "festember-campus",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix"
+  },
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/material": "^5.9.3",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint \"**/*.{js,jsx}\"",
-    "lint:fix": "eslint \"**/*.{js,jsx}\" --fix",
-    "stylelint": "stylelint \"**/*.css\"",
-    "stylelint:fix": "stylelint \"**/*.css\" --fix",
-    "prettier": "prettier \"**/*.{json,md,html,yaml}\" --list-different",
-    "prettier:fix": "prettier \"**/*.{json,md,html,yaml}\"  --write",
-    "format": "npm run lint:fix && npm run stylelint:fix && npm run prettier:fix",
-    "format:error": "npm run lint && npm run stylelint && npm run prettier",
-    "postinstall": "husky install"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react-router-dom": "^6.3.0"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint"
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
     ],
-    "*.{json,md,html,yaml}": [
-      "prettier --list-different"
-    ],
-    "*.css": [
-      "stylelint"
+    "*.{html,css,less,ejs}": [
+      "prettier --write"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "@vitejs/plugin-react": "^2.0.0",
     "eslint": "^8.21.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
@@ -74,7 +42,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "stylelint": "^14.9.1",
-    "stylelint-config-standard": "^26.0.0"
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0"
   }
 }

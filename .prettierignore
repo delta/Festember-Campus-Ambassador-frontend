@@ -1,0 +1,6 @@
+*.png
+package.json
+package-lock.json
+public/
+build/
+README.md

@@ -20,8 +20,5 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
-      - name: Check Linters
-        run: npm run lint
-
       - name: Build
         run: npm run build
