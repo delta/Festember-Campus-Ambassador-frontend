@@ -16,7 +16,7 @@ export default function ScrollToTop() {
         style={{ position: 'absolute', right: '20px' }}
         onClick={scrollToTop}
       >
-        <NorthIcon fontSize="large" />
+        <NorthIcon  sx={{ fontSize: 50 }} />
       </IconButton>
     </div>
   );
