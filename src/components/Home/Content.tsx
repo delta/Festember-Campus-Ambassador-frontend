@@ -7,12 +7,14 @@ import { StyledButton } from '../../theme';
 import ScrollToTop from './ScrollToTop';
 
 export default function Content() {
-  const contentSection = useRef();
+  const contentSection = useRef<HTMLDivElement>(null);
   const scrollDown = () => {
-    window.scrollTo({
-      top: contentSection.current.offsetTop,
-      behavior: 'smooth',
-    });
+    if (contentSection.current) {
+      window.scrollTo({
+        top: contentSection.current.offsetTop,
+        behavior: 'smooth',
+      });   
+    }
   };
   return (
     <>
