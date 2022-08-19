@@ -7,25 +7,27 @@ export default function Header() {
     <>
       <div className={styles.headerContainer}>
         <div>
-          <img
-            src="./festember-logo.png"
-            alt="festember-logo"
-            className={styles.headerlogo}
-          />
+          <a href="https://www.festember.com/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="./festember-logo.png"
+              alt="festember-logo"
+              className={styles.headerlogo}
+            />
+          </a>
         </div>
         <div className={styles.headerContent}>
           <div className={styles.headerLeft}>
-            <img src="./landing-page-img.png" alt="landing-image" className={styles.landingImage}/>
+            <img
+              src="./landing-page-img.png"
+              alt="landing-image"
+              className={styles.landingImage}
+            />
           </div>
           <div className={styles.headerRight}>
-            <div
-              className={styles.headerRightTop}
-            >
+            <div className={styles.headerRightTop}>
               {homePageHeaderData.header}
             </div>
-            <div
-              className={styles.headerRightDesc}
-            >
+            <div className={styles.headerRightDesc}>
               {homePageHeaderData.content}
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { createTheme, styled } from '@mui/material/styles';
-import MuiButton from "@mui/material/Button";
+import MuiButton from '@mui/material/Button';
 
 export const customTheme = createTheme({
   components: {
@@ -10,34 +10,60 @@ export const customTheme = createTheme({
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
-        }
-      }
+          backgroundAttachment: 'fixed',
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        sizeMedium: {
+          color: '#fff',
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#fff',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#fff',
+          },
+          '& .MuiSelect-icon': {
+            color: '#fff',
+          }
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+        },
+      },
     }
   },
   palette: {
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#666666'
-    },
     primary: {
-      main: '#FFFFFF'
-    }
-  }
+      main: '#FFFFFF',
+    },
+  },
 });
 
 export const StyledButton = styled(MuiButton)(props => ({
-  background: "#FFFFFF",
+  background: '#FFFFFF',
   fontWeight: 400,
-  fontSize: "1.5rem",
-  color: "#666666",
-  textAlign: "center",
-  borderRadius: "40px",
-  padding: "20px 80px",
+  fontSize: '1.5rem',
+  color: '#666666',
+  textAlign: 'center',
+  borderRadius: '40px',
+  padding: '20px 80px',
   fontFamily: 'DM Serif Display',
   textTransform: 'none',
   margin: '1rem',
-  "&:hover": {
-    background: "#F0A49D"
-  }
+  '&:hover': {
+    background: '#F0A49D',
+  },
 }));
