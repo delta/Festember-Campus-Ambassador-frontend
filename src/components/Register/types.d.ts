@@ -16,3 +16,8 @@ export type FormProps = {
   isRegistered: boolean;
   handleRegister: () => void;
 }
+
+export type CollegeObject = {
+  id: Number;
+  college_name: string;
+};

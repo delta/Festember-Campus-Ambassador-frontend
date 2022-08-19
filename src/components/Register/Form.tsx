@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState, SyntheticEvent } from 'react';
 import axios from 'axios';
 import * as emailValidator from 'email-validator';
-import { TextField } from '@mui/material';
+import {
+  Autocomplete,
+  TextField,
+} from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -10,7 +13,7 @@ import { StyledButton } from '../../theme';
 import styles from './styles.module.css';
 import Toast from '../Toast';
 import { BACKEND_URL } from '../../../config/config';
-import { FormProps } from './types';
+import { FormProps, CollegeObject } from './types';
 import {
   GenderList,
   StreamList,
@@ -23,32 +26,51 @@ export default function RegisterForm({
   isRegistered,
   handleRegister,
 }: FormProps) {
-  const [userName, setUserName] = React.useState<string>('');
-  const [userEmail, setUserEmail] = React.useState<string>('');
-  const [collegeState, setCollegeState] = React.useState<string>('');
-  const [collegeCity, setCollegeCity] = React.useState<string>('');
-  const [collegeName, setCollegeName] = React.useState<string>('');
-  const [dob, setDob] = React.useState<Date | null>(new Date(Date.now()));
-  const [stream, setStream] = React.useState<string>(StreamList[0]);
-  const [gender, setGender] = React.useState<string>(GenderList[0]);
-  const [YearOfStudy, setYearOfStudy] = React.useState<string>(
-    YearOfStudyList[0],
-  );
-  const [mobileNumber, setMobileNumber] = React.useState<string>('');
-  const [referralCode, setReferralCode] = React.useState<string>('');
-  const [userInstagramLink, setUserInstagramLink] = React.useState<string>('');
-  const [userTwitterLink, setUserTwitterLink] = React.useState<string>('');
-  const [userFacebookLink, setUserFacebookLink] = React.useState<string>('');
-  const [userLinkedInLink, setUserLinkedInLink] = React.useState<string>('');
-  const [userInterests, setUserInterests] = React.useState(interestsList);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [toastMessage, setToastMessage] = React.useState<string>('');
-  const [toastSeverity, setToastSeverity] = React.useState<'success' | 'error'>(
+  const [userName, setUserName] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [collegeData, setCollegeData] = useState<CollegeObject[]>([
+    { id: 0, college_name: 'Other' },
+  ]);
+  const [collegeId, setCollegeId] = useState<Number>(-1);
+  const [collegeState, setCollegeState] = useState<string>('');
+  const [collegeCity, setCollegeCity] = useState<string>('');
+  const [collegeName, setCollegeName] = useState<string>('');
+  const [dob, setDob] = useState<Date | null>(new Date(Date.now()));
+  const [stream, setStream] = useState<string>(StreamList[0]);
+  const [gender, setGender] = useState<string>(GenderList[0]);
+  const [YearOfStudy, setYearOfStudy] = useState<string>(YearOfStudyList[0]);
+  const [mobileNumber, setMobileNumber] = useState<string>('');
+  const [referralCode, setReferralCode] = useState<string>('');
+  const [userInstagramLink, setUserInstagramLink] = useState<string>('');
+  const [userTwitterLink, setUserTwitterLink] = useState<string>('');
+  const [userFacebookLink, setUserFacebookLink] = useState<string>('');
+  const [userLinkedInLink, setUserLinkedInLink] = useState<string>('');
+  const [userInterests, setUserInterests] = useState(interestsList);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>(
     'success',
   );
 
+  useEffect(() => {
+    const getCollegeData = async () => {
+      await axios({
+        method: 'get',
+        url: `${BACKEND_URL}/colleges`,
+      })
+        .then(response => {
+          const fetchedColleges = collegeData.concat(response.data);
+          setCollegeData(fetchedColleges);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    };
+    getCollegeData();
+  }, []);
+
   const handleToastClose = (
-    event?: React.SyntheticEvent | Event,
+    event?: SyntheticEvent | Event,
     reason?: string,
   ) => {
     if (reason === 'clickaway') {
@@ -58,15 +80,11 @@ export default function RegisterForm({
   };
 
   const validateForm = () => {
-    const requiredFields = [
-      userName,
-      userEmail,
-      collegeState,
-      collegeCity,
-      collegeName,
-      mobileNumber,
-    ];
-    if (requiredFields.includes('')) {
+    const requiredFields = [userName, userEmail, mobileNumber];
+    if (collegeId === 0) {
+      requiredFields.push(collegeName, collegeState, collegeCity);
+    }
+    if (requiredFields.includes('') || collegeId === -1) {
       setToastOpen(true);
       setToastMessage('Please fill all required fields');
       setToastSeverity('error');
@@ -95,6 +113,8 @@ export default function RegisterForm({
       data: JSON.stringify({
         user_name: userName,
         user_email: userEmail,
+        user_other_college: collegeId === 0,
+        user_college_id: collegeId,
         user_college_state: collegeState,
         user_college_name: collegeName,
         user_college_city: collegeCity,
@@ -140,24 +160,49 @@ export default function RegisterForm({
           onChange={e => setUserEmail(e.target.value)}
           isRequired={true}
         />
-        <InputContainer
-          inputLabel="College State"
-          value={collegeState}
-          onChange={e => setCollegeState(e.target.value)}
-          isRequired={true}
-        />
-        <InputContainer
-          inputLabel="College City"
-          value={collegeCity}
-          onChange={e => setCollegeCity(e.target.value)}
-          isRequired={true}
-        />
-        <InputContainer
-          inputLabel="College Name"
-          value={collegeName}
-          onChange={e => setCollegeName(e.target.value)}
-          isRequired={true}
-        />
+        <div className={styles.inputContainer}>
+          <div className={styles.inputLabel}>College Name*</div>
+          <Autocomplete
+            style={{ width: "inherit" }}
+            onChange={(event, value) => {
+              let selectedCollege = collegeData.find(
+                college => college.college_name === value,
+              );
+              if (selectedCollege) {
+                setCollegeId(selectedCollege.id);
+              } else {
+                setCollegeId(-1);
+              }
+            }}
+            options={collegeData.map(option => option.college_name)}
+            sx={{ width: 300 }}
+            renderInput={params => <TextField {...params} />}
+          />
+        </div>
+        {collegeId === 0 ? (
+          <>
+            <InputContainer
+              inputLabel="College Name"
+              value={collegeName}
+              onChange={e => setCollegeName(e.target.value)}
+              isRequired={true}
+            />
+            <InputContainer
+              inputLabel="College City"
+              value={collegeCity}
+              onChange={e => setCollegeCity(e.target.value)}
+              isRequired={true}
+            />
+            <InputContainer
+              inputLabel="College State"
+              value={collegeState}
+              onChange={e => setCollegeState(e.target.value)}
+              isRequired={true}
+            />
+          </>
+        ) : (
+          ''
+        )}
         <div className={styles.inputContainer}>
           <div className={styles.inputLabel}>Date of birth</div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
