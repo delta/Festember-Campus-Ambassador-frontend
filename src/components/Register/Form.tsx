@@ -59,7 +59,7 @@ export default function RegisterForm({
         url: `${BACKEND_URL}/colleges`,
       })
         .then(response => {
-          const fetchedColleges = collegeData.concat(response.data);
+          const fetchedColleges = collegeData.concat(response.data.message);
           setCollegeData(fetchedColleges);
         })
         .catch(err => {
@@ -107,13 +107,11 @@ export default function RegisterForm({
       if (userInterests[interest]) userInterestsArr.push(interest);
     }
 
-    await axios({
-      method: 'post',
-      url: `${BACKEND_URL}/crew/register`,
-      data: JSON.stringify({
+    await axios
+      .post(`${BACKEND_URL}/crew/register`, {
         user_name: userName,
         user_email: userEmail,
-        user_other_college: collegeId === 0,
+        user_other_college: collegeId === 0 ? 1 : 0,
         user_college_id: collegeId,
         user_college_state: collegeState,
         user_college_name: collegeName,
@@ -128,8 +126,7 @@ export default function RegisterForm({
         user_twitter_link: userTwitterLink,
         user_linkedin_link: userLinkedInLink,
         user_interests: userInterestsArr,
-      }),
-    })
+      })
       .then(res => {
         console.log(res.data);
         handleRegister();
