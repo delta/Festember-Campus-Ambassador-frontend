@@ -31,6 +31,7 @@ export default function RegisterForm({ handleRegister }: FormProps) {
   const [userOtherCollege, setUserOtherCollege] = useState<boolean>(false);
   const [collegeData, setCollegeData] = useState<CollegeObject[]>([]);
   const [collegeId, setCollegeId] = useState<number>(-1);
+  const [selectedCollege, setSelectedCollege] = useState<string>('');
   const [collegeState, setCollegeState] = useState<string>('');
   const [collegeCity, setCollegeCity] = useState<string>('');
   const [collegeName, setCollegeName] = useState<string>('');
@@ -58,7 +59,7 @@ export default function RegisterForm({ handleRegister }: FormProps) {
         url: `${BACKEND_URL}/colleges`,
       })
         .then(response => {
-          setCollegeData(response.data);
+          setCollegeData(response.data.message);
         })
         .catch(err => {
           console.log(err);
@@ -111,10 +112,8 @@ export default function RegisterForm({ handleRegister }: FormProps) {
       if (userInterests[interest]) userInterestsArr.push(interest);
     }
 
-    await axios({
-      method: 'post',
-      url: `${BACKEND_URL}/crew/register`,
-      data: JSON.stringify({
+    await axios
+      .post(`${BACKEND_URL}/crew/register`, {
         user_name: userName,
         user_email: userEmail,
         user_other_college: userOtherCollege ? 1 : 0,
@@ -132,8 +131,7 @@ export default function RegisterForm({ handleRegister }: FormProps) {
         user_twitter_link: userTwitterLink,
         user_linkedin_link: userLinkedInLink,
         user_interests: userInterestsArr,
-      }),
-    })
+      })
       .then(() => {
         handleRegister();
         setToastOpen(true);
@@ -171,15 +169,17 @@ export default function RegisterForm({ handleRegister }: FormProps) {
               width: 'inherit',
             }}
             onChange={(event, value) => {
-              const selectedCollege = collegeData.find(
+              const userSelectedCollege = collegeData.find(
                 college => college.college_name === value,
               );
-              if (selectedCollege) {
-                setCollegeId(selectedCollege.id);
+              if (userSelectedCollege) {
+                setSelectedCollege(userSelectedCollege.college_name);
+                setCollegeId(userSelectedCollege.id);
               } else {
                 setCollegeId(-1);
               }
             }}
+            value={userOtherCollege ? '' : selectedCollege}
             options={collegeData.map(option => option.college_name)}
             sx={{ width: 300 }}
             renderInput={params => <TextField {...params} />}
