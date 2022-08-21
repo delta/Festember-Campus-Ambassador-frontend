@@ -7,13 +7,13 @@ export const publicRoutes = [
   {
     url: '/',
     component: <Home />,
-    name: 'HomePage'
+    name: 'HomePage',
   },
   {
     url: '/register',
     component: <Register />,
-    name: 'RegisterPage'
-  }
+    name: 'RegisterPage',
+  },
 ];
 
 export const adminRoutes = [];

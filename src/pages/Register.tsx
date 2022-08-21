@@ -13,10 +13,10 @@ export default function Register() {
     <>
       <Header isRegistered={isRegistered} />
       {!isRegistered ? (
-          <RegisterForm
-            isRegistered={isRegistered}
-            handleRegister={handleRegister}
-          />
+        <RegisterForm
+          isRegistered={isRegistered}
+          handleRegister={handleRegister}
+        />
       ) : (
         <FormSubmit />
       )}

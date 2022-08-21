@@ -3,6 +3,9 @@ import axios from 'axios';
 import * as emailValidator from 'email-validator';
 import {
   Autocomplete,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   TextField,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -15,30 +18,26 @@ import Toast from '../Toast';
 import { BACKEND_URL } from '../../../config/config';
 import { FormProps, CollegeObject } from './types';
 import {
-  GenderList,
-  StreamList,
-  YearOfStudyList,
+  genderList,
+  streamList,
+  yearOfStudyList,
   interestsList,
   convertDateFormat,
 } from './formUtils';
 
-export default function RegisterForm({
-  isRegistered,
-  handleRegister,
-}: FormProps) {
+export default function RegisterForm({ handleRegister }: FormProps) {
   const [userName, setUserName] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
-  const [collegeData, setCollegeData] = useState<CollegeObject[]>([
-    { id: 0, college_name: 'Other' },
-  ]);
-  const [collegeId, setCollegeId] = useState<Number>(-1);
+  const [userOtherCollege, setUserOtherCollege] = useState<boolean>(false);
+  const [collegeData, setCollegeData] = useState<CollegeObject[]>([]);
+  const [collegeId, setCollegeId] = useState<number>(-1);
   const [collegeState, setCollegeState] = useState<string>('');
   const [collegeCity, setCollegeCity] = useState<string>('');
   const [collegeName, setCollegeName] = useState<string>('');
   const [dob, setDob] = useState<Date | null>(new Date(Date.now()));
-  const [stream, setStream] = useState<string>(StreamList[0]);
-  const [gender, setGender] = useState<string>(GenderList[0]);
-  const [YearOfStudy, setYearOfStudy] = useState<string>(YearOfStudyList[0]);
+  const [stream, setStream] = useState<string>(streamList[0]);
+  const [gender, setGender] = useState<string>(genderList[0]);
+  const [yearOfStudy, setYearOfStudy] = useState<string>(yearOfStudyList[0]);
   const [mobileNumber, setMobileNumber] = useState<string>('');
   const [referralCode, setReferralCode] = useState<string>('');
   const [userInstagramLink, setUserInstagramLink] = useState<string>('');
@@ -59,11 +58,13 @@ export default function RegisterForm({
         url: `${BACKEND_URL}/colleges`,
       })
         .then(response => {
-          const fetchedColleges = collegeData.concat(response.data);
-          setCollegeData(fetchedColleges);
+          setCollegeData(response.data);
         })
         .catch(err => {
           console.log(err);
+          setToastOpen(true);
+          setToastMessage('Oops! Something went wrong!');
+          setToastSeverity('error');
         });
     };
     getCollegeData();
@@ -81,10 +82,13 @@ export default function RegisterForm({
 
   const validateForm = () => {
     const requiredFields = [userName, userEmail, mobileNumber];
-    if (collegeId === 0) {
+    if (userOtherCollege) {
       requiredFields.push(collegeName, collegeState, collegeCity);
     }
-    if (requiredFields.includes('') || collegeId === -1) {
+    if (
+      requiredFields.includes('') ||
+      (!userOtherCollege && collegeId === -1)
+    ) {
       setToastOpen(true);
       setToastMessage('Please fill all required fields');
       setToastSeverity('error');
@@ -101,8 +105,8 @@ export default function RegisterForm({
   const handleFormSubmit = async () => {
     if (!validateForm()) return;
 
-    let convertedDate = convertDateFormat(dob);
-    let userInterestsArr = [];
+    const convertedDate = convertDateFormat(dob);
+    const userInterestsArr = [];
     for (const interest in userInterests) {
       if (userInterests[interest]) userInterestsArr.push(interest);
     }
@@ -113,7 +117,7 @@ export default function RegisterForm({
       data: JSON.stringify({
         user_name: userName,
         user_email: userEmail,
-        user_other_college: collegeId === 0,
+        user_other_college: userOtherCollege ? 1 : 0,
         user_college_id: collegeId,
         user_college_state: collegeState,
         user_college_name: collegeName,
@@ -121,7 +125,7 @@ export default function RegisterForm({
         user_date_of_birth: convertedDate,
         user_gender: gender,
         user_stream: stream,
-        user_year_of_study: YearOfStudy,
+        user_year_of_study: yearOfStudy,
         user_mobile_number: mobileNumber,
         user_insta_link: userInstagramLink,
         user_facebook_link: userFacebookLink,
@@ -130,8 +134,7 @@ export default function RegisterForm({
         user_interests: userInterestsArr,
       }),
     })
-      .then(res => {
-        console.log(res.data);
+      .then(() => {
         handleRegister();
         setToastOpen(true);
         setToastMessage('Successfully Registered!');
@@ -161,11 +164,14 @@ export default function RegisterForm({
           isRequired={true}
         />
         <div className={styles.inputContainer}>
-          <div className={styles.inputLabel}>College Name*</div>
+          <div className={styles.inputLabel}>Select your college*</div>
           <Autocomplete
-            style={{ width: "inherit" }}
+            disabled={userOtherCollege}
+            style={{
+              width: 'inherit',
+            }}
             onChange={(event, value) => {
-              let selectedCollege = collegeData.find(
+              const selectedCollege = collegeData.find(
                 college => college.college_name === value,
               );
               if (selectedCollege) {
@@ -179,7 +185,24 @@ export default function RegisterForm({
             renderInput={params => <TextField {...params} />}
           />
         </div>
-        {collegeId === 0 ? (
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                onClick={() => setUserOtherCollege(!userOtherCollege)}
+                style={{
+                  color: '#fff',
+                }}
+              />
+            }
+            label={
+              <span className={styles.inputLabel}>
+                College name not in the list
+              </span>
+            }
+          />
+        </FormGroup>
+        {userOtherCollege ? (
           <>
             <InputContainer
               inputLabel="College Name"
@@ -204,7 +227,7 @@ export default function RegisterForm({
           ''
         )}
         <div className={styles.inputContainer}>
-          <div className={styles.inputLabel}>Date of birth</div>
+          <div className={styles.inputLabel}>Date of birth*</div>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
               inputFormat="MM/dd/yyyy"
@@ -215,22 +238,22 @@ export default function RegisterForm({
           </LocalizationProvider>
         </div>
         <DropDownContainer
-          inputLabel="Gender"
+          inputLabel="Gender*"
           value={gender}
           onChange={e => setGender(e.target.value)}
-          dropDownList={GenderList}
+          dropDownList={genderList}
         />
         <DropDownContainer
-          inputLabel="Stream"
+          inputLabel="Stream*"
           value={stream}
           onChange={e => setStream(e.target.value)}
-          dropDownList={StreamList}
+          dropDownList={streamList}
         />
         <DropDownContainer
-          inputLabel="Year of Study"
-          value={YearOfStudy}
+          inputLabel="Year of Study*"
+          value={yearOfStudy}
           onChange={e => setYearOfStudy(e.target.value)}
-          dropDownList={YearOfStudyList}
+          dropDownList={yearOfStudyList}
         />
         <InputContainer
           inputLabel="Mobile Number"
@@ -274,6 +297,7 @@ export default function RegisterForm({
           <div className={styles.interestOptionsContainer}>
             {Object.keys(userInterests).map(interest => (
               <div
+                key={interest}
                 className={userInterests[interest] ? styles.interestOption : ''}
                 onClick={() => {
                   setUserInterests({

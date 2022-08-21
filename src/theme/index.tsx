@@ -25,6 +25,11 @@ export const customTheme = createTheme({
       styleOverrides: {
         root: {
           color: '#fff',
+          '&.Mui-disabled .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#fff',
+            cursor: 'not-allowed',
+            pointerEvents: 'all !important',
+          },
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: '#fff',
           },
@@ -33,7 +38,7 @@ export const customTheme = createTheme({
           },
           '& .MuiSelect-icon': {
             color: '#fff',
-          }
+          },
         },
       },
     },
@@ -43,7 +48,7 @@ export const customTheme = createTheme({
           color: '#fff',
         },
       },
-    }
+    },
   },
   palette: {
     primary: {
@@ -52,7 +57,7 @@ export const customTheme = createTheme({
   },
 });
 
-export const StyledButton = styled(MuiButton)(props => ({
+export const StyledButton = styled(MuiButton)(() => ({
   background: '#FFFFFF',
   fontWeight: 400,
   fontSize: '1.5rem',

@@ -9,7 +9,11 @@ export default function Header({ isRegistered }: { isRegistered: boolean }) {
   return (
     <div className={styles.headerContainer}>
       <div>
-        <a href="https://www.festember.com/" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.festember.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img
             src="./festember-logo.png"
             alt="festember-logo"

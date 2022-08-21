@@ -47,12 +47,13 @@
 .inputLabel {
   font-family: 'Poppins';
   font-style: normal;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 500;
   padding-bottom: 10px;
 }
 
 .inputContainer{
+  font-family: 'Poppins';
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -62,7 +63,7 @@
 .socialProfiles {
   font-family: 'Poppins';
   font-style: normal;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 800;
   padding-top: 30px;
 }
@@ -109,6 +110,10 @@
 
 .registerImage{
   object-fit: contain;
+}
+
+.dropDownText {
+  font-family: 'Poppins' !important;
 }
 
 @media (max-width: 1155px) {

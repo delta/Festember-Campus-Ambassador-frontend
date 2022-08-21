@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { IconButton } from '@mui/material';
 import NorthIcon from '@mui/icons-material/North';
 
@@ -13,7 +13,7 @@ export function ScrollToTop() {
         style={{ position: 'absolute', right: '20px' }}
         onClick={useScrollToTop}
       >
-        <NorthIcon  sx={{ fontSize: 50 }} />
+        <NorthIcon sx={{ fontSize: 50 }} />
       </IconButton>
     </div>
   );

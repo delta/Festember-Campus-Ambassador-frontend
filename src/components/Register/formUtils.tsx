@@ -1,6 +1,6 @@
-export const GenderList = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
+export const genderList = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
 
-export const StreamList = [
+export const streamList = [
   'Engineering',
   'Medical',
   'Arts',
@@ -10,7 +10,7 @@ export const StreamList = [
   'Management',
   'Other',
 ];
-export const YearOfStudyList = [
+export const yearOfStudyList = [
   '1st year',
   '2nd year',
   '3rd year',
@@ -33,7 +33,7 @@ export const interestsList: { [key: string]: boolean } = {
 
 export function convertDateFormat(str: Date | null) {
   if (str == null) return null;
-  var date = new Date(str),
+  const date = new Date(str),
     mnth = ('0' + (date.getMonth() + 1)).slice(-2),
     day = ('0' + date.getDate()).slice(-2);
   return [date.getFullYear(), mnth, day].join('-');
