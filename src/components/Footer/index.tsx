@@ -16,14 +16,14 @@ export default function Footer() {
               Twitter
             </a>
             <a
-              href="https://www.facebook.com/festember"
+              href="https://www.instagram.com/festember/"
               target="_blank"
               rel="noopener noreferrer"
             >
               Instagram
             </a>
             <a
-              href="https://www.instagram.com/festember/"
+              href="https://www.facebook.com/festember"
               target="_blank"
               rel="noopener noreferrer"
             >
