@@ -1,5 +1,6 @@
 FROM node:19-alpine
 
+WORKDIR /usr/app
 RUN npm install -g pm2
 COPY ./package*.json ./
 RUN npm install
