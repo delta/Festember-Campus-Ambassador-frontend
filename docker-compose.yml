@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: campusAmbassador_FCA
+    build: .
+    ports:
+      - "7101:5432"
+    restart: always
